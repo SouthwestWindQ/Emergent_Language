@@ -57,9 +57,7 @@ class InsideAgentForAction(nn.Module):
         self.n_states_per_digit = n_states_per_digit
         self.vocab_size = vocab_size
         self.fc1 = nn.Linear(vocab_size, latent)
-        self.bn1 = nn.BatchNorm1d(latent)
         self.fc2 = nn.Linear(latent, latent)
-        self.bn2 = nn.BatchNorm1d(latent)
         self.fc3 = nn.Linear(latent, n_states_per_digit * n_digits)
         
     def forward(self, x):
@@ -73,7 +71,8 @@ class InsideAgentForAction(nn.Module):
             where each component represents the predicted log-probability of 
             each modified digit.
         """
-        x = F.relu(self.bn1(self.fc1(x)))
-        x = F.relu(self.bn2(self.fc2(x)))
+        x = self.fc1(x)
+        x = F.relu(self.fc2(x))
+        # print(f"shape = {x.shape}")
         x = self.fc3(x).reshape(x.shape[0], self.n_digits, -1)
         return x
