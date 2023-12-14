@@ -10,7 +10,7 @@
 
 **测试**：可通过运行`python debug.py`测试现有的checkpoint。该checkpoint是20万个iteration中最好的：对所有的初始状态，正确率为25/27，结果是较为令人满意的。`debug.py`中的代码可以自行修改，如让它储存中间输出的symbol index等等。
 
-**其它**：（1）simple文件夹中存储的是简化的游戏环境的测试结果，在这一件简化环境中，inside agent通过symbol传递init state，outside agent直接通过这一symbol预测init state。simple文件夹中存储的是三个最好的checkpoint，它们对所有初始状态都达到了27/27的准确率。
+**其它**：（1）simple文件夹中存储的是简化的游戏环境的测试结果，在这一简化环境中，inside agent通过symbol传递init state，outside agent直接通过这一symbol预测init state。simple文件夹中存储的是三个最好的checkpoint，它们对所有初始状态都达到了27/27的准确率。
 
 （2）我们的环境看似简单，但对超参数的要求是比较高的。上面已经提到不同的lr与batch size会对结果有非常显著的影响，此外过度训练也会使表现不升反降（最好的checkpoint发生在20000-35000个iteration，再之后的iteration偶会出现表现结果较好的，但均不如最好的checkpoint）。
 

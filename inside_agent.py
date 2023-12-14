@@ -30,11 +30,11 @@ class InsideAgentForInitState(nn.Module):
     def forward(self, state: torch.Tensor) -> torch.Tensor:
         """
         Args:
-            state (torch.Tensor): a `n_digits`-dimensional 1D tensor 
+            state (torch.Tensor): a tensor of size `(batch_size, n_digits)`
             representing the initial state.
 
         Returns:
-            torch.Tensor: a `vocab_size`-dimensional 1D tensor 
+            torch.Tensor: a tensor `(batch_size, vocab_size)`
             representing the predicted log-probability of each symbol.
         """
 
@@ -65,11 +65,11 @@ class InsideAgentForAction(nn.Module):
     def forward(self, x):
         """
         Args:
-            state (torch.Tensor): a one-hot tensor  of size (1, `vocab_size`)
+            state (torch.Tensor): a one-hot tensor of size `(batch_size, vocab_size)`
             representing the symbol uttered by the outside agent.
 
         Returns:
-            torch.Tensor: a 3D tensor of size (1, `n_digits`, `n_states_per_digit`)
+            torch.Tensor: a tensor of size `(batch_size, n_digits, n_states_per_digit)`
             where each component represents the predicted log-probability of 
             each modified digit.
         """
