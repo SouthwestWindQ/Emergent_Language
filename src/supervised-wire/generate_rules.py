@@ -1,6 +1,7 @@
 import json
 import random
-    
+
+
 init_states = [''.join((str(i), str(j), str(k))) for i in range(3) for j in range(3) for k in range(3)]
 goal_states = [''.join((str(i), str(j), str(k))) for i in range(3) for j in range(3) for k in range(3)]
 

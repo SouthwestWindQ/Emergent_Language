@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 
+
 # Define functions leveraged in Gumbel-Softmax tricks.
 def sample_gumbel(shape, eps=1e-20):
     U = torch.rand(shape)

@@ -1,7 +1,10 @@
 test.py
-/custom_data
-/env
-__pycache__
-.DS_Store
+debug.py
 output*.txt
-/debug
+
+env/
+debug/
+custom_data/
+__pycache__/
+
+.DS_Store

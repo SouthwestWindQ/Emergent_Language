@@ -14,24 +14,15 @@ class OutsideStateModel(nn.Module):
         self.fc2 = nn.Linear(in_features=hidden_dim, out_features=output_dim*8, bias=True)
         self.act = nn.ReLU()
         self.out_head = nn.Linear(in_features=8, out_features=state_dim, bias=True)
-        # TODO: Is it suitable to choose "1" here as the hidden state dimension?
 
     def forward(self, input, goal_state):
-        # input (Batch_size, input_dim=input_dim)
         embed = self.fc0(input)
         embed = torch.concat((embed, goal_state), dim=-1)
-        # print(f"embed.shape = {embed.shape}")
         hidden_state = self.act(self.fc1(embed))
         output = self.act(self.fc2(hidden_state))
-        
-        # equivalent to parameter sharing but may improve efficiency?
-        # one more thing: if we choose another number (larger than 1) as the hidden state dim, 
-        # this operation will cause error, but so does the initial `for` loop.
         output = output.reshape(-1, self.output_dim, 8)
-        # print(f"output.shape = {output.shape}")
         output_dist = self.out_head(output)
-        # print(f"output_dist.shape = {output_dist.shape}")
-        return output_dist # (Batch_size, output_dim, state_dim)
+        return output_dist
 
 
 class OutsideComModel(nn.Module):
@@ -49,6 +40,4 @@ class OutsideComModel(nn.Module):
         input = input.reshape(-1, self.input_dim*self.input_range)
         hidden_state = self.act(self.fc1(input))
         output = self.act(self.fc2(hidden_state))
-        # print(f"output.shape = {output.shape}")
-        # output_dist = torch.softmax(output, dim=-1)
         return output
