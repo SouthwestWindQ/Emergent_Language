@@ -7,6 +7,7 @@ from tqdm import tqdm
 from config import parse_args
 from environment import Wire3Env
 from dqn_agent import ReplayBuffer, DQN
+import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
@@ -34,17 +35,25 @@ if __name__ == "__main__":
                 device=device)
 
     return_list = []
+    pic_return_list = []
+    step_list = []
+    x = []
+    cnt = 0
     for i in range(10):
         with tqdm(total=int(args.num_episode / 10), desc='Iteration %d' % i) as pbar:
             for i_episode in range(int(args.num_episode / 10)):
                 episode_return = 0
                 state = env.remake()
                 done = False
+                cnt += 1
+                x.append(cnt)
                 while not done:
                     action = agent.take_action(state, env.goal_state)
                     if len(action.shape) == 2:
                         action = np.squeeze(action, axis=0)
                     next_state, reward, done = env.step(action)
+                    # if i_episode == 10:
+                    #     print(action, next_state, reward)
                     replay_buffer.add(state, action, reward, next_state, env.goal_state, done)
                     state = next_state
                     episode_return += reward
@@ -61,12 +70,17 @@ if __name__ == "__main__":
                         }
                         agent.update(data)
                 return_list.append(episode_return)
+                pic_return_list.append(np.mean(return_list[-10:]))
+                step_list.append(env.now_step)
                 if (i_episode + 1) % 10 == 0:
                     pbar.set_postfix({
                         'episode':  '%d' % (args.num_episode / 10 * i + i_episode + 1),
                         'return':   '%.3f' % np.mean(return_list[-10:]),
                     })
-                    with open('debug/output1.txt', 'a') as f:
-                        f.write(f'{args.num_episode / 10 * i + i_episode + 1}: {np.mean(return_list[-10:])}')
-                        f.write('\n')
+                    # with open('debug/output1.txt', 'a') as f:
+                    #     f.write(f'{args.num_episode / 10 * i + i_episode + 1}: {np.mean(return_list[-10:])}')
+                    #     f.write('\n')
                 pbar.update(1)
+
+    plt.plot(x, pic_return_list)
+    plt.show()

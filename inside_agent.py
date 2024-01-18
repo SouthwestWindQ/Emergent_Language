@@ -16,7 +16,7 @@ class InsideAgentForInitState(nn.Module):
     initial state to the outside agent through a symbol.
     """
     
-    def __init__(self, n_digits: int, n_states_per_digit: int, vocab_size: int, latent: int=64):
+    def __init__(self, n_digits: int, n_states_per_digit: int, vocab_size: int, latent: int=32):
         super(InsideAgentForInitState, self).__init__()
         self.n_digits = n_digits 
         self.n_states_per_digit = n_states_per_digit
@@ -69,8 +69,8 @@ class InsideAgentForAction(nn.Module):
             where each component represents the predicted log-probability of 
             each modified digit.
         """
-        
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
+        # print(f"shape = {x.shape}")
         x = self.fc3(x).reshape(x.shape[0], self.n_digits, -1)
         return x

@@ -61,6 +61,7 @@ class Wire3Env(gymnasium.Env):
         self.now_state = self.init_state
         self.now_step = 0
         self.lines = []
+        self.right_lines = [0, 0, 0]
         self.viewer = None
         
         self.rule_path = os.path.join(args.rule_path, f'rule_dim{self.args.state_dim}_range{self.args.state_range}')
@@ -75,10 +76,19 @@ class Wire3Env(gymnasium.Env):
         assert self.action_space.contains(action), "%r (%s) invalid" % (action, type(action))
         self.now_state = (self.now_state + action) % self.args.state_range
         done = False
-        reward = 0
+        reward = -1
         if np.all(self.now_state == self.goal_state):
             done = True
-            reward = 1
+            reward = 10
+            return self.now_state, reward, done
+        else:
+            for i in range(len(self.now_state)):
+                if (self.now_state[i] == self.goal_state[i]) and self.right_lines[i] == 0:
+                    self.right_lines[i] = 1
+                    reward += 1
+        if self.now_step >= 200:
+            done = True
+            reward = 0
 
         self.now_step += 1
 
@@ -93,6 +103,10 @@ class Wire3Env(gymnasium.Env):
         self.init_state = [random.randint(0, self.args.state_range-1) for _ in range(self.args.state_dim)]
         self.goal_state = self.rule[state2str(self.init_state)]
         self.now_state = self.init_state
+        self.right_lines = [0,0,0]
+        for i in range(len(self.init_state)):
+            if self.init_state[i] == self.goal_state[i]:
+                self.right_lines[i] = 1
         return self.init_state
 
     def render(self, mode='human', close=False):
