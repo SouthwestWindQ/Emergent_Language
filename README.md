@@ -3,7 +3,7 @@ Source codes of the course project *Keep Talking and Nobody Explodes: A New Desi
 
 The brief introduction concerning the structure of files:
 
-- **src/supervised-wire**：source code of the supervised method on *Wire Riddles* environment. For training, run `gumbel_ae.py` with arguments specified in `config.py`. This will automatically record the metrics information every 100 episode, and save the modules that succeed in predicting all action profiles given the batch of initial state profiles. The logging directory and saving directory should be carefully specified (see `config.py`). 
+- **src/supervised-wire**：source code of the supervised method on *Wire Riddles* environment. For training, run `gumbel_ae.py` with arguments specified in `config.py`. This will automatically record the metrics information every 100 episode, and save the modules that succeed in predicting all action profiles given the batch of initial state profiles. The logging directory and saving directory should be carefully specified (see `config.py`). For inference, run `eval.py` with arguments the same as the training. You should keep the rule file the same as that in training, or the results will be very wired.
 - **src/rl-wire**：source code of the RL method on *Wire Riddles* environment.
 - **src/rl-maze**：source code of the RL method on *Maze Mastermind* environment.
 - **rendering**：source code of our visualization of *Wire Riddles* environment.
