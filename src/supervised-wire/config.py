@@ -11,5 +11,7 @@ def parse_args():
     parser.add_argument("--state_dim", type=int, default=3, help="The number of digits in one state.")
     parser.add_argument("--state_range", type=int, default=3, help="The number of possible values in one digit.")
     parser.add_argument("--lr", type=float, default=1e-4, help="Learning rate used in the training process.")
+    parser.add_argument("--saving_path", type="str", default="./checkpoint", help="path to save the checkpoints")
+    parser.add_argument("--logging_path", type="str", default="./log", help="path to record the metric results")
     
     return parser.parse_args()

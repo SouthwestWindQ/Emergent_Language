@@ -1,3 +1,4 @@
+import os
 import json
 import torch
 import random
@@ -99,7 +100,7 @@ if __name__ == "__main__":
         
         # Each 100 iterations record the loss and accuracy information in the log file.
         if i % 100 == 0:
-            with open(f'log/v{args.vocab_size}_l{args.latent}/lr1e-4.txt', 'a') as file:
+            with open(os.path.join(args.logging_path, f"v{args.vocab_size}_l{args.latent}", "log.txt"), 'a') as file:
                 file.write('Train | episode {:6d} | loss: {:.3f} | acc: {:.3f}\n'.format(
                     i, loss.item(), torch.sum(torch.all(gt_actions==preds.argmax(-1), dim=1))/args.batch_size
                 ))
@@ -108,7 +109,7 @@ if __name__ == "__main__":
         # If yes, store all the checkpoints for further inference.
         # The threshold accuracy and save steps are all hyper-parameters, which I will save in the argument parser later.
         if torch.sum(torch.all(gt_actions==preds.argmax(-1), dim=1)) == args.batch_size:
-            torch.save(step1_encoder, f'./checkpoints/v{args.vocab_size}_l{args.latent}/encoder1-lr1e-4-checkpoint-{i}.pth')
-            torch.save(step1_decoder, f'./checkpoints/v{args.vocab_size}_l{args.latent}/decoder1-lr1e-4-checkpoint-{i}.pth')
-            torch.save(step2_encoder, f'./checkpoints/v{args.vocab_size}_l{args.latent}/encoder2-lr1e-4-checkpoint-{i}.pth')
-            torch.save(step2_decoder, f'./checkpoints/v{args.vocab_size}_l{args.latent}/decoder2-lr1e-4-checkpoint-{i}.pth')
+            torch.save(step1_encoder, os.path.join(args.saving_path, f'v{args.vocab_size}_l{args.latent}', f'encoder1-checkpoint-{i}.pth'))
+            torch.save(step1_decoder, os.path.join(args.saving_path, f'v{args.vocab_size}_l{args.latent}', f'decoder1-checkpoint-{i}.pth'))
+            torch.save(step2_encoder, os.path.join(args.saving_path, f'v{args.vocab_size}_l{args.latent}', f'encoder2-checkpoint-{i}.pth'))
+            torch.save(step2_decoder, os.path.join(args.saving_path, f'v{args.vocab_size}_l{args.latent}', f'decoder2-checkpoint-{i}.pth'))
